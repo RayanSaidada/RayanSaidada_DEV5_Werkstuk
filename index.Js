@@ -48,6 +48,22 @@ server.put('/updateByID', async (req, res) => {
   });
 
 
+  
+//DELETEBYID
+server.delete('/deleteByID', async (req, res) => {
+    console.log("Delete object by ID")
+    const {id} = req.body
+    if(!id) return res.sendStatus(400);
+    await pg('games').where({id: id})
+    .del()
+    .then(data => {
+      if(data !== 1) return res.sendStatus(400)
+      res.sendStatus(200)
+    })
+  })
+
+
+
 //INITIALISE
   async function initialiseTables() {
     await pg.schema.hasTable('games').then(async (exists) => {
