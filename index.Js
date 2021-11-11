@@ -22,6 +22,31 @@ server.get("/getAll", async(req, res) => {
 });
 
 
+//UPDATEBYID
+server.put('/updateByID', async (req, res) => {
+    console.log(`Update object by ID`);
+    const {
+        id,
+        name, 
+        developer, 
+        releaseDate, 
+        price,
+        platforms
+    } = req.body
+        await pg('games')
+        .where({id: id})
+        .update({
+            name: name,
+            developer: developer,
+            releaseDate: releaseDate, 
+            price: price,
+            platforms: platforms
+        })
+        .then(data => {
+          res.sendStatus(200)
+        })
+  });
+
 
 //INITIALISE
   async function initialiseTables() {
