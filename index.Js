@@ -12,6 +12,17 @@ const pg = require('knex')({
 
 
 
+//GETALL
+server.get("/getAll", async(req, res) => {
+    console.log(`GET all objects`);
+    await pg.select().from('games')
+    .then(data => {
+      res.send(data)
+    })
+});
+
+
+
 //INITIALISE
   async function initialiseTables() {
     await pg.schema.hasTable('games').then(async (exists) => {
