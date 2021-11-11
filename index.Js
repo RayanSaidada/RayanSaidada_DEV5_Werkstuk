@@ -11,7 +11,28 @@ const pg = require('knex')({
   });
 
 
+//CREATE
+server.post("/create",async(req,res)=>{
+    console.log(`new object created`);
+    const {
+        name, 
+        developer, 
+        releaseDate, 
+        price,
+        platforms
+    } = req.body
+    if(name, developer, releaseDate, price, platforms){
+          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms})
+          .then(data => {
+            res.sendStatus(200);
+          })
+  
+    }else{
+      res.sendStatus(400);
+    }
+  });
 
+  
 //GETALL
 server.get("/getAll", async(req, res) => {
     console.log(`GET all objects`);
@@ -48,7 +69,7 @@ server.put('/updateByID', async (req, res) => {
   });
 
 
-  
+
 //DELETEBYID
 server.delete('/deleteByID', async (req, res) => {
     console.log("Delete object by ID")
