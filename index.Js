@@ -32,7 +32,7 @@ server.post("/create",async(req,res)=>{
     }
   });
 
-  
+
 //GETALL
 server.get("/getAll", async(req, res) => {
     console.log(`GET all objects`);
@@ -41,6 +41,52 @@ server.get("/getAll", async(req, res) => {
       res.send(data)
     })
 });
+
+
+//GETBYID
+server.get("/getByID", async(req, res) => {
+    console.log(`GET all objects by ID`);
+    const {id} = req.body
+    await pg.select().from('games').where({id:id})
+    .then(data => {
+      res.send(data)
+    })
+});
+
+
+//GETBYNAME
+server.get("/getByName", async(req, res) => {
+    console.log(`GET all objects by Name`);
+    const {name} = req.body
+    await pg.select().from('games').where({name:name})
+    .then(data => {
+      res.send(data)
+    })
+});
+
+
+//GETBYPRICE
+server.get("/getByPrice", async(req, res) => {
+    console.log(`GET all objects by price`);
+    const {price} = req.body
+    await pg.select().from('games').where({price:price})
+    .then(data => {
+      res.send(data)
+    })
+});
+
+
+//GETBYDEVELOPER
+server.get("/getByDeveloper", async(req, res) => {
+    console.log(`GET all objects by developer`);
+    const {developer} = req.body
+    await pg.select().from('games').where({developer:developer})
+    .then(data => {
+      res.send(data)
+    })
+});
+
+
 
 
 //UPDATEBYID
@@ -67,6 +113,8 @@ server.put('/updateByID', async (req, res) => {
           res.sendStatus(200)
         })
   });
+
+
 
 
 
