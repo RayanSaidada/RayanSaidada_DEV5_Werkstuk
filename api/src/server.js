@@ -1,17 +1,28 @@
 const express = require("express");
 const server = express();
-const PORT = 1081;
 server.use(express.json());
 
+
+
+/**
+  * Dit is nodig om het server te linken met het juiste account op pgAdmin
+  * @params naam role, password, poort en database pgAdmin
+  * @returns verband tussen knex en pgAdmind
+  */
 const pg = require('knex')({
     client: 'pg',
     version: '14',
     searchPath: ['knex', 'public'],
-    connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://admin:saSDaJnM@localhost:5432/games'
+    connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://admin:saSDaJnM@games_db:5432/games'
   });
 
 
-//CREATE
+
+/**
+  * Dit is een endpoint dat een object zal maken met verschilllende parameters en daarna invoert in het database
+  * @params (object) name, developer, releaseDate, price, platforms 
+  * @returns (object) nieuwe game met: name, developer, releaseDate, price, platforms 
+  */
 server.post("/create",async(req,res)=>{
     console.log(`new object created`);
     const {
@@ -33,7 +44,11 @@ server.post("/create",async(req,res)=>{
   });
 
 
-//GETALL
+/**
+  * Dit is een endpoint dat alle objecten van het database zal tonen
+  * @params geen
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  */
 server.get("/getAll", async(req, res) => {
     console.log(`GET all objects`);
     await pg.select().from('games')
@@ -43,7 +58,11 @@ server.get("/getAll", async(req, res) => {
 });
 
 
-//GETBYID
+/**
+  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven ID
+  * @params id
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  */
 server.get("/getByID", async(req, res) => {
     console.log(`GET all objects by ID`);
     const {id} = req.body
@@ -54,7 +73,12 @@ server.get("/getByID", async(req, res) => {
 });
 
 
-//GETBYNAME
+
+/**
+  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven naam
+  *  @params name
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  */
 server.get("/getByName", async(req, res) => {
     console.log(`GET all objects by Name`);
     const {name} = req.body
@@ -65,7 +89,12 @@ server.get("/getByName", async(req, res) => {
 });
 
 
-//GETBYPRICE
+
+/**
+  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven Prijs
+  *  @params price
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  */
 server.get("/getByPrice", async(req, res) => {
     console.log(`GET all objects by price`);
     const {price} = req.body
@@ -76,7 +105,12 @@ server.get("/getByPrice", async(req, res) => {
 });
 
 
-//GETBYDEVELOPER
+
+/**
+  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven developer
+  * @params developer
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  */
 server.get("/getByDeveloper", async(req, res) => {
     console.log(`GET all objects by developer`);
     const {developer} = req.body
@@ -89,7 +123,12 @@ server.get("/getByDeveloper", async(req, res) => {
 
 
 
-//UPDATEBYID
+
+/**
+  * Dit is een endpoint dat de paramaters van een object ten opzichte van een gekozen ID door de gebruiker kunnen worden gewijzigd
+  * @params id AND (name OR developer OR releaseDate OR price OR platforms)
+  * @returns (object) game met zijn gewijzigd: name, developer, releaseDate, price, platforms
+  */
 server.put('/updateByID', async (req, res) => {
     console.log(`Update object by ID`);
     const {
@@ -117,8 +156,11 @@ server.put('/updateByID', async (req, res) => {
 
 
 
-
-//DELETEBYID
+/**
+  * Dit is een endpoint dat een game van het database zal verwijderen ten opzichte van het gegeven ID
+  * @params id
+  * @returns gekozen object word verwijderd
+  */
 server.delete('/deleteByID', async (req, res) => {
     console.log("Delete object by ID")
     const {id} = req.body
@@ -133,7 +175,11 @@ server.delete('/deleteByID', async (req, res) => {
 
 
 
-//INITIALISE
+/**
+  * Initialisatie van het tabel in pgAdmin 
+  * @params geen
+  * @returns gemaakte tabels in pgAdmin
+  */
   async function initialiseTables() {
     await pg.schema.hasTable('games').then(async (exists) => {
       if (!exists) {
@@ -155,8 +201,4 @@ server.delete('/deleteByID', async (req, res) => {
   initialiseTables()
 
 
-
-//LISTEN
-server.listen(PORT, () => {
-    console.log(`Server listening at ${PORT}`);
-});
+  module.exports = server;

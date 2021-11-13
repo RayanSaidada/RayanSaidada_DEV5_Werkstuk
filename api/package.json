@@ -5,15 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.17.1",
+    "jest": "^27.3.1",
     "knex": "^0.95.14",
-    "node": "^17.0.1",
     "nodemon": "^2.0.15",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "supertest": "^6.1.6"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node ./src/index.js",
+    "test": "jest ./src"
   },
   "repository": {
     "type": "git",
