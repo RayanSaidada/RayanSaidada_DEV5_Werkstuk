@@ -1,5 +1,5 @@
 const server = require('./server.js');
-const PORT = 1081;
+const PORT = 3000;
 
 /**
   * laat het server luisteren naar het juiste poort om het te kunnen gebruiken

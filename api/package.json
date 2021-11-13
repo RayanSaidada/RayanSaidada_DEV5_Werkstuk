@@ -7,15 +7,14 @@
     "express": "^4.17.1",
     "jest": "^27.3.1",
     "knex": "^0.95.14",
-    "node": "^17.0.1",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1",
     "supertest": "^6.1.6"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js",
-    "test": "jest ./"
+    "start": "node ./src/index.js",
+    "test": "jest ./src"
   },
   "repository": {
     "type": "git",
