@@ -17,7 +17,7 @@ Open het folder met Visual Studio
 Open het terminal:  
 -npm install  
 -npm start  
-Surf naar localhost:1081 met uw browser  
+Surf naar localhost:3000 met uw browser  
 
 ## RESOURCES
 https://docs.docker.com/  
