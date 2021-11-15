@@ -17,8 +17,7 @@ Open het folder met Visual Studio
 Open het terminal:  
 1) npm install  
 2) npm start  
-3) docker-compose build
-4) docker-compose up
+3) docker-compose up --build
 5) Surf naar localhost:3000 met uw browser  
 
 ## RESOURCES
