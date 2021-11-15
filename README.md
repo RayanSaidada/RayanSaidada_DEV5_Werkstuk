@@ -18,7 +18,7 @@ Open het terminal:
 1) npm install  
 2) npm start  
 3) docker-compose up --build
-5) Surf naar localhost:3000 met uw browser  
+Surf naar localhost:3000 met uw browser  
 
 ## RESOURCES
 https://docs.docker.com/  
