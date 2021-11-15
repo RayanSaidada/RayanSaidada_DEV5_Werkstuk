@@ -14,7 +14,7 @@ describe('POST /create', () => {
 
 
 describe('GET /getAll', () => {
-    test('should give an array',  () => {
+    test('should give an Object',  () => {
       try {
          request.get('/getAll').expect(Object);
       } catch (err) {
@@ -23,7 +23,7 @@ describe('GET /getAll', () => {
   });
 
 describe('GET /getByID', () => {
-    test('should give an array',  () => {
+    test('should give an Object',  () => {
       try {
          request.get('/getByID').expect(Object);
       } catch (err) {
@@ -32,7 +32,7 @@ describe('GET /getByID', () => {
   });
 
 describe('GET /getByName', () => {
-    test('should give an array',  () => {
+    test('should give an Object',  () => {
       try {
          request.get('/getByName').expect(Object);
       } catch (err) {
@@ -50,7 +50,7 @@ describe('GET /getByPrice', () => {
   });
 
 describe('GET /getByDeveloper', () => {
-    test('should give an array',  () => {
+    test('should give an Object',  () => {
       try {
          request.put('/getByDeveloper').expect(Object);
       } catch (err) {
@@ -59,7 +59,7 @@ describe('GET /getByDeveloper', () => {
   });
 
 describe('PUT /updateByID', () => {
-    test('should give an array',  () => {
+    test('should give an Object',  () => {
       try {
          request.put('/updateByID').expect(Object);
       } catch (err) {
@@ -68,7 +68,7 @@ describe('PUT /updateByID', () => {
   });
 
 describe('DEL /deleteByID', () => {
-    test('should give an array',  () => {
+    test('should responds with code 200',  () => {
         request.del('/deleteByID').expect(200);
     });
   });
