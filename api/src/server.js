@@ -23,17 +23,18 @@ const pg = require('knex')({
   * @params (object) name, developer, releaseDate, price, platforms 
   * @returns (object) nieuwe game met: name, developer, releaseDate, price, platforms 
   */
-server.post("/create",async(req,res)=>{
+server.post("/createGame",async(req,res)=>{
     console.log(`new object created`);
     const {
         name, 
         developer, 
         releaseDate, 
         price,
-        platforms
+        platforms,
+        genre
     } = req.body
-    if(name, developer, releaseDate, price, platforms){
-          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms})
+    if(name, developer, releaseDate, price, platforms, genre){
+          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms, genre: genre})
           .then(data => {
             res.sendStatus(200);
           })
@@ -42,6 +43,21 @@ server.post("/create",async(req,res)=>{
       res.sendStatus(400);
     }
   });
+
+server.post("/createGenre", async(req,res)=>{
+  console.log(`new genre created`);
+  const{
+    genre
+  } = req.body
+  if(genre){
+  await pg('genre').insert({genre:genre})
+  .then(data => {
+    res.sendStatus(200);
+  })
+}else{
+    res.sendStatus(400);
+  }
+});
 
 
 /**
@@ -137,6 +153,25 @@ server.get("/getByDeveloper", async(req, res) => {
 });
 
 
+/**
+  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven genre
+  * @params developer
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  */
+ server.get("/getByGenre", async(req, res) => {
+  console.log(`GET all objects by genre`);
+  const {genre} = req.body
+  await pg.select().from('games').where({genre:genre})
+  .then(data => {
+    res.send(data)
+  }).catch(err => {
+    res.send({
+      message: err.stack
+    })
+  })
+});
+
+
 
 
 
@@ -153,17 +188,12 @@ server.put('/updateByID', async (req, res) => {
         developer, 
         releaseDate, 
         price,
-        platforms
+        platforms,
+        genre
     } = req.body
         await pg('games')
         .where({id: id})
-        .update({
-            name: name,
-            developer: developer,
-            releaseDate: releaseDate, 
-            price: price,
-            platforms: platforms
-        })
+        .update({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms, genre: genre})
         .then(data => {
           res.sendStatus(200)
         }).catch(err => {
@@ -204,7 +234,7 @@ server.delete('/deleteByID', async (req, res) => {
   * @params geen
   * @returns gemaakte tabels in pgAdmin
   */
-  async function initialiseTables() {
+  async function initialiseTableGames() {
     await pg.schema.hasTable('games').then(async (exists) => {
       if (!exists) {
         await pg.schema
@@ -215,6 +245,7 @@ server.delete('/deleteByID', async (req, res) => {
             table.string('releaseDate');
             table.string('price');
             table.string('platforms');
+            table.string('genre');
             table.timestamps(true, true);
           })
           .then(async () => {
@@ -222,7 +253,26 @@ server.delete('/deleteByID', async (req, res) => {
       }
     });
   }
-  initialiseTables()
+
+  async function initialiseTableCategorie() {
+  await pg.schema.hasTable('genre').then(async (exists) => {
+    if (!exists) {
+      await pg.schema
+        .createTable('genre', (table) => {
+          table.increments();
+          table.string('genre');
+          table.timestamps(true, true);
+        })
+        .then(async () => {
+        });
+      }
+    });
+    }
+  
+  
+
+  initialiseTableGames();
+  initialiseTableCategorie();
 
 
   module.exports = server;
