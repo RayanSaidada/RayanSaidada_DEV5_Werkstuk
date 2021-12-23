@@ -69,6 +69,10 @@ server.get("/getByID", async(req, res) => {
     await pg.select().from('games').where({id:id})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
 });
 
@@ -85,6 +89,10 @@ server.get("/getByName", async(req, res) => {
     await pg.select().from('games').where({name:name})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
 });
 
@@ -101,6 +109,10 @@ server.get("/getByPrice", async(req, res) => {
     await pg.select().from('games').where({price:price})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
 });
 
@@ -117,6 +129,10 @@ server.get("/getByDeveloper", async(req, res) => {
     await pg.select().from('games').where({developer:developer})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
 });
 
@@ -150,6 +166,10 @@ server.put('/updateByID', async (req, res) => {
         })
         .then(data => {
           res.sendStatus(200)
+        }).catch(err => {
+          res.send({
+            message: err.stack
+          })
         })
   });
 
@@ -170,6 +190,10 @@ server.delete('/deleteByID', async (req, res) => {
     .then(data => {
       if(data !== 1) return res.sendStatus(400)
       res.sendStatus(200)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
   })
 
