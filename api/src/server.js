@@ -1,4 +1,5 @@
 const express = require("express");
+const { default: knex } = require("knex");
 const server = express();
 server.use(express.json());
 
@@ -17,7 +18,6 @@ const pg = require('knex')({
   });
 
 
-
 /**
   * Dit is een endpoint dat een object zal maken met verschilllende parameters en daarna invoert in het database
   * @params (object) name, developer, releaseDate, price, platforms, genre
@@ -34,17 +34,20 @@ server.post("/createGame",async(req,res)=>{
         genre
     } = req.body
     if(name, developer, releaseDate, price, platforms, genre){
-          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms, genre: genre})
+          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms, genre: genre}),
+          await pg('genre').insert({genre:genre})
+          
           .then(data => {
             res.sendStatus(200);
+           
           })
-  
-    }else{
+         }
+    else{
       res.sendStatus(400);
     }
   });
 
-
+  
 
 /**
   * Dit is een endpoint dat een genre zal maken met een parameter en daarna invoert in het database
@@ -373,10 +376,70 @@ server.delete('/deleteGamesByID', async (req, res) => {
     });
     }
   
-  
+    async function insertDataInTables() {
+
+      await pg.table("games").insert({
+          name: "Rainbow Six Siege",
+          developer: "Ubisoft",
+          releaseDate: "26/11/2015",
+          price: "€59.99",
+          platforms: "PlayStation 4, Xbox One, PlayStation 5, Xbox Series, Google Stadia, Microsoft Windows", 
+          genre: "FPS"
+      });
+
+     
+      await pg.table("games").insert({
+          name: "Super Mario",
+          developer: "Nintendo",
+          releaseDate: "04/02/2021",
+          price: "€69.99",
+          platforms: "Nintendo Switch, Wii U", 
+          genre: "Platform"
+      });
+
+
+     
+      await pg.table("games").insert({
+          name: "Leaugue of Legends",
+          developer: "Riot Games",
+          releaseDate: "27/10/2009",
+          price: "FREE TO PLAY",
+          platforms: "Microsoft Windows, IOS", 
+          genre: "FPS"
+      });
+
+    
+      await pg.table("games").insert({
+          name: "Overwatch",
+          developer: "Blizzard",
+          releaseDate: "03/05/2016",
+          price: "€39.99",
+          platforms: "PlayStation 4, Xbox One, Nintendo Switch, Microsoft Windows", 
+          genre: "FPS"
+      });
+
+      
+      await pg.table("genre").insert({
+          genre: "Horror"
+      });
+
+
+      await pg.table("genre").insert({
+        genre: "Adventure"
+      });
+
+      await pg.table("genre").insert({
+        genre: "Puzzle"
+    });
+
+    await pg.table("genre").insert({
+      genre: "FPS"
+    });
+
+  }
 
   initialiseTableGames();
   initialiseTableCategorie();
-
+  insertDataInTables();
 
   module.exports = server;
