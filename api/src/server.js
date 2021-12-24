@@ -20,20 +20,21 @@ const pg = require('knex')({
 
 /**
   * Dit is een endpoint dat een object zal maken met verschilllende parameters en daarna invoert in het database
-  * @params (object) name, developer, releaseDate, price, platforms 
-  * @returns (object) nieuwe game met: name, developer, releaseDate, price, platforms 
+  * @params (object) name, developer, releaseDate, price, platforms, genre
+  * @returns (object) nieuwe game met: name, developer, releaseDate, price, platforms, genre 
   */
-server.post("/create",async(req,res)=>{
+server.post("/createGame",async(req,res)=>{
     console.log(`new object created`);
     const {
         name, 
         developer, 
         releaseDate, 
         price,
-        platforms
+        platforms,
+        genre
     } = req.body
-    if(name, developer, releaseDate, price, platforms){
-          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms})
+    if(name, developer, releaseDate, price, platforms, genre){
+          await pg('games').insert({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms, genre: genre})
           .then(data => {
             res.sendStatus(200);
           })
@@ -44,13 +45,35 @@ server.post("/create",async(req,res)=>{
   });
 
 
+
 /**
-  * Dit is een endpoint dat alle objecten van het database zal tonen
-  * @params geen
-  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  * Dit is een endpoint dat een genre zal maken met een parameter en daarna invoert in het database
+  * @params (object) genre
+  * @returns (object) nieuwe genre
   */
-server.get("/getAll", async(req, res) => {
-    console.log(`GET all objects`);
+server.post("/createGenre", async(req,res)=>{
+  console.log(`new genre created`);
+  const{
+    genre
+  } = req.body
+  if(genre){
+  await pg('genre').insert({genre:genre})
+  .then(data => {
+    res.sendStatus(200);
+  })
+}else{
+    res.sendStatus(400);
+  }
+});
+
+
+/**
+  * Dit is een endpoint dat alle games van het database zal tonen
+  * @params geen
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms, genre
+  */
+server.get("/getAllGames", async(req, res) => {
+    console.log(`GET all games`);
     await pg.select().from('games')
     .then(data => {
       res.send(data)
@@ -59,65 +82,152 @@ server.get("/getAll", async(req, res) => {
 
 
 /**
-  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven ID
-  * @params id
-  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  * Dit is een endpoint dat alle genres van het database zal tonen
+  * @params geen
+  * @returns (object) lijst genres met hun genre
   */
-server.get("/getByID", async(req, res) => {
-    console.log(`GET all objects by ID`);
+ server.get("/getAllGenres", async(req, res) => {
+  console.log(`GET all genres`);
+  await pg.select().from('genre')
+  .then(data => {
+    res.send(data)
+  })
+});
+
+
+
+/**
+  * Dit is een endpoint dat alle games van het games database zal tonen met het ingegeven ID
+  * @params id
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms, genre
+  */
+server.get("/getGamesByID", async(req, res) => {
+    console.log(`GET all games by ID`);
     const {id} = req.body
     await pg.select().from('games').where({id:id})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
+});
+
+
+/**
+  * Dit is een endpoint dat alle genres van het genre database zal tonen met het ingegeven ID
+  * @params id
+  * @returns (object) lijst genre met hun: genre
+  */
+ server.get("/getGenreByID", async(req, res) => {
+  console.log(`GET all games by ID`);
+  const {id} = req.body
+  await pg.select().from('genre').where({id:id})
+  .then(data => {
+    res.send(data)
+  }).catch(err => {
+    res.send({
+      message: err.stack
+    })
+  })
 });
 
 
 
 /**
-  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven naam
+  * Dit is een endpoint dat alle games van het database zal tonen met het ingegeven naam
   *  @params name
-  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms, genre
   */
-server.get("/getByName", async(req, res) => {
-    console.log(`GET all objects by Name`);
+server.get("/getGamesByName", async(req, res) => {
+    console.log(`GET all games by Name`);
     const {name} = req.body
     await pg.select().from('games').where({name:name})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
 });
 
 
+/**
+  * Dit is een endpoint dat alle genres van het genre database zal tonen met het ingegeven genre
+  * @params genre
+  * @returns (object) lijst genre met hun: genre
+  */
+ server.get("/getGenreByGenre", async(req, res) => {
+  console.log(`GET all genre by genre`);
+  const {genre} = req.body
+  await pg.select().from('genre').where({genre:genre})
+  .then(data => {
+    res.send(data)
+  }).catch(err => {
+    res.send({
+      message: err.stack
+    })
+  })
+});
+
 
 /**
-  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven Prijs
+  * Dit is een endpoint dat alle games van het database zal tonen met het ingegeven Prijs
   *  @params price
-  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms, genre
   */
-server.get("/getByPrice", async(req, res) => {
+server.get("/getGamesByPrice", async(req, res) => {
     console.log(`GET all objects by price`);
     const {price} = req.body
     await pg.select().from('games').where({price:price})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
 });
 
 
 
 /**
-  * Dit is een endpoint dat alle objecten van het database zal tonen met het ingegeven developer
+  * Dit is een endpoint dat alle games van het database zal tonen met het ingegeven developer
   * @params developer
-  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms, genre
   */
-server.get("/getByDeveloper", async(req, res) => {
+server.get("/getGamesByDeveloper", async(req, res) => {
     console.log(`GET all objects by developer`);
     const {developer} = req.body
     await pg.select().from('games').where({developer:developer})
     .then(data => {
       res.send(data)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
+});
+
+
+/**
+  * Dit is een endpoint dat alle games van het database zal tonen met het ingegeven genre
+  * @params genre
+  * @returns (object) lijst games met hun: name, developer, releaseDate, price, platforms, genre
+  */
+ server.get("/getGamesByGenre", async(req, res) => {
+  console.log(`GET all objects by genre`);
+  const {genre} = req.body
+  await pg.select().from('games').where({genre:genre})
+  .then(data => {
+    res.send(data)
+  }).catch(err => {
+    res.send({
+      message: err.stack
+    })
+  })
 });
 
 
@@ -127,9 +237,9 @@ server.get("/getByDeveloper", async(req, res) => {
 /**
   * Dit is een endpoint dat de paramaters van een object ten opzichte van een gekozen ID door de gebruiker kunnen worden gewijzigd
   * @params id AND (name OR developer OR releaseDate OR price OR platforms)
-  * @returns (object) game met zijn gewijzigd: name, developer, releaseDate, price, platforms
+  * @returns (object) game met zijn gewijzigd: name, developer, releaseDate, price, platforms, genre
   */
-server.put('/updateByID', async (req, res) => {
+server.put('/updateGamesByID', async (req, res) => {
     console.log(`Update object by ID`);
     const {
         id,
@@ -137,22 +247,45 @@ server.put('/updateByID', async (req, res) => {
         developer, 
         releaseDate, 
         price,
-        platforms
+        platforms,
+        genre
     } = req.body
         await pg('games')
         .where({id: id})
-        .update({
-            name: name,
-            developer: developer,
-            releaseDate: releaseDate, 
-            price: price,
-            platforms: platforms
-        })
+        .update({name: name, developer: developer, releaseDate: releaseDate, price: price, platforms: platforms, genre: genre})
         .then(data => {
           res.sendStatus(200)
+        }).catch(err => {
+          res.send({
+            message: err.stack
+          })
         })
   });
 
+
+
+/**
+  * Dit is een endpoint dat de paramaters van een genre ten opzichte van een gekozen ID door de gebruiker kunnen worden gewijzigd
+  * @params id
+  * @returns (object) genre met zijn gewijzigd genre
+  */
+ server.put('/updateGenresByID', async (req, res) => {
+  console.log(`Update object by ID`);
+  const {
+      id,
+      genre
+  } = req.body
+      await pg('genre')
+      .where({id: id})
+      .update({genre: genre})
+      .then(data => {
+        res.sendStatus(200)
+      }).catch(err => {
+        res.send({
+          message: err.stack
+        })
+      })
+});
 
 
 
@@ -161,7 +294,7 @@ server.put('/updateByID', async (req, res) => {
   * @params id
   * @returns gekozen object word verwijderd
   */
-server.delete('/deleteByID', async (req, res) => {
+server.delete('/deleteGamesByID', async (req, res) => {
     console.log("Delete object by ID")
     const {id} = req.body
     if(!id) return res.sendStatus(400);
@@ -170,9 +303,34 @@ server.delete('/deleteByID', async (req, res) => {
     .then(data => {
       if(data !== 1) return res.sendStatus(400)
       res.sendStatus(200)
+    }).catch(err => {
+      res.send({
+        message: err.stack
+      })
     })
   })
 
+
+/**
+  * Dit is een endpoint dat een genre van het database zal verwijderen ten opzichte van het gegeven ID
+  * @params id
+  * @returns gekozen object word verwijderd
+  */
+ server.delete('/deleteGenreByID', async (req, res) => {
+  console.log("Delete genre by ID")
+  const {id} = req.body
+  if(!id) return res.sendStatus(400);
+  await pg('genre').where({id: id})
+  .del()
+  .then(data => {
+    if(data !== 1) return res.sendStatus(400)
+    res.sendStatus(200)
+  }).catch(err => {
+    res.send({
+      message: err.stack
+    })
+  })
+})
 
 
 /**
@@ -180,7 +338,7 @@ server.delete('/deleteByID', async (req, res) => {
   * @params geen
   * @returns gemaakte tabels in pgAdmin
   */
-  async function initialiseTables() {
+  async function initialiseTableGames() {
     await pg.schema.hasTable('games').then(async (exists) => {
       if (!exists) {
         await pg.schema
@@ -191,6 +349,7 @@ server.delete('/deleteByID', async (req, res) => {
             table.string('releaseDate');
             table.string('price');
             table.string('platforms');
+            table.string('genre');
             table.timestamps(true, true);
           })
           .then(async () => {
@@ -198,7 +357,26 @@ server.delete('/deleteByID', async (req, res) => {
       }
     });
   }
-  initialiseTables()
+
+  async function initialiseTableCategorie() {
+  await pg.schema.hasTable('genre').then(async (exists) => {
+    if (!exists) {
+      await pg.schema
+        .createTable('genre', (table) => {
+          table.increments();
+          table.string('genre');
+          table.timestamps(true, true);
+        })
+        .then(async () => {
+        });
+      }
+    });
+    }
+  
+  
+
+  initialiseTableGames();
+  initialiseTableCategorie();
 
 
   module.exports = server;
