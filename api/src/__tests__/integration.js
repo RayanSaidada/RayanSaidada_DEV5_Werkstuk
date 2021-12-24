@@ -27,15 +27,23 @@ describe('POST /createGenre', () => {
 
 describe('GET /getAllGames', () => {
     test('should give all games',  () => {
+
+describe('GET /getAll', () => {
+    test('should give an Object',  () => {
+ main
       try {
          request.get('/getAllGames').expect(Object);
       } catch (err) {
       }
     });
   });
-
+      
   describe('GET /getAllGenres', () => {
     test('should give all genres',  () => {
+
+describe('GET /getByID', () => {
+    test('should give an Object',  () => {
+ main
       try {
          request.get('/getAllGenres').expect(Object);
       } catch (err) {
@@ -45,9 +53,12 @@ describe('GET /getAllGames', () => {
 
 
 
-
 describe('GET /getGamesByID/:id', () => {
     test('should give a game by given id',  () => {
+
+describe('GET /getByName', () => {
+    test('should give an Object',  () => {
+ main
       try {
          request.get('/getGamesByID').expect(Object);
       } catch (err) {
@@ -66,8 +77,13 @@ describe('GET /getGamesByID/:id', () => {
 
 
 
+
 describe('GET /getGamesByName/:name', () => {
     test('should give a game by given name',  () => {
+
+describe('GET /getByDeveloper', () => {
+    test('should give an Object',  () => {
+ main
       try {
          request.get('/getGamesByName').expect(Object);
       } catch (err) {
@@ -78,6 +94,10 @@ describe('GET /getGamesByName/:name', () => {
 
   describe('GET /getGenreByGenre/:genre', () => {
     test('should give a genre by given genre',  () => {
+
+describe('PUT /updateByID', () => {
+    test('should give an Object',  () => {
+ main
       try {
          request.get('/getGenreByGenre').expect(Object);
       } catch (err) {
@@ -86,12 +106,18 @@ describe('GET /getGamesByName/:name', () => {
   });
 
 
+
 describe('GET /getGamesByPrice/:price', () => {
     test('should give a game by given price',  () => {
       try {
          request.get('/getGamesByPrice').expect(Object);
       } catch (err) {
       }
+
+describe('DEL /deleteByID', () => {
+    test('should responds with code 200',  () => {
+        request.del('/deleteByID').expect(200);
+ main
     });
   });
 
